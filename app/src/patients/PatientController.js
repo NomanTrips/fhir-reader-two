@@ -31,10 +31,29 @@ patientControllers.controller('PatientDetailCtrl', ['Patient', '$mdSidenav', '$r
   function (Patient, $mdSidenav, $routeParams, ConditionList, PrescriptionList, Medication, ProcedureList, $location, $anchorScroll) {
   var patientDetail = this;
   patientDetail.medications = [];
+  var category = '';
 
-  patientDetail.scrollTo = function(id) {
+
+  patientDetail.isSelectedCategory = function(category) {
+    if (category == patientDetail.category) {
+      return true;
+    } else {
+      return false;
+    }
+
+  };
+
+  patientDetail.scrollTo = function(category) {
+    
+    if (category != patientDetail.category) {
+      patientDetail.category = category;  
+    } else {
+      patientDetail.category = ''; // Clear the category if the button is clicked again
+    }
+
+
     var old = $location.hash();
-    $location.hash(id);
+    $location.hash(category);
     $anchorScroll();
     $location.hash(old);
   };
@@ -46,16 +65,19 @@ patientControllers.controller('PatientDetailCtrl', ['Patient', '$mdSidenav', '$r
   
   ConditionList.get({id: $routeParams.id})
     .$promise.then(function(conditions) {
+      patientDetail.isConditionsReturned = conditions.$resolved;
       patientDetail.conditionEntries = conditions.entry;
     });
 
   ProcedureList.get({id: $routeParams.id})
     .$promise.then(function(procedures) {
+      patientDetail.isProceduresReturned = procedures.$resolved;
       patientDetail.procedureEntries = procedures.entry;
     });
 
   PrescriptionList.get({id: $routeParams.id})
    .$promise.then(function(prescriptions) {
+    patientDetail.isPrescriptionsReturned = prescriptions.$resolved;
     patientDetail.prescriptionEntries = prescriptions.entry;
     
     angular.forEach(patientDetail.prescriptionEntries, function(value, key) {

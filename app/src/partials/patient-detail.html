@@ -1,131 +1,129 @@
- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div flex layout="row">
+  <md-sidenav  ng-click="ul.toggleList()" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left" style="background-color:#424242;" >
+    <md-list flex="" >
+      <md-list-item>               
+        <md-subheader style="background-color:#424242;">
+          <h3 style="color:white;"><b>Patient: </b>{{patientDetail.patient.name[0].given + ' '+ patientDetail.patient.name[0].family}}</h3>
+        </md-subheader> 
+      </md-list-item>     
+      <md-subheader style="background-color:#424242;color:white;"><md-icon md-svg-icon='./assets/svg/ic_storage.svg' style="padding-right:10px;"></md-icon>Table of Contents</md-subheader>
+      <md-list-item>
+        <md-button class="md-primary" ng-click="patientDetail.scrollTo('Patient Information')" ng-class="patientDetail.isSelectedCategory('Patient Information') ? 'selected': 'unselected'">
+          Patient Information
+        </md-button>
+      </md-list-item>
+      <md-list-item>
+        <md-button class="md-primary" ng-click="patientDetail.scrollTo('Conditions')" ng-class="patientDetail.isSelectedCategory('Conditions') ? 'selected' : 'unselected'">
+          Conditions
+        </md-button>
+      </md-list-item>
+      <md-list-item>
+        <md-button class="md-primary" ng-click="patientDetail.scrollTo('Prescriptions')" ng-class="patientDetail.isSelectedCategory('Prescriptions') ? 'selected' : 'unselected'">
+          Prescriptions
+        </md-button>
+      </md-list-item>
+      <md-list-item>
+        <md-button class="md-primary" ng-click="patientDetail.scrollTo('Procedures')" ng-class="patientDetail.isSelectedCategory('Procedures') ? 'selected' : 'unselected'">
+          Procedures
+        </md-button>
+      </md-list-item>
+    </md-list>
+  </md-sidenav>
+  
+  <md-content flex>
+  
+    <md-toolbar class="md-warn">
+      <h2 class="md-toolbar-tools">
+        <span>Summary of Care:</span>
+      </h2>
+    </md-toolbar>
 
-    <div flex layout="row">
+    <md-card>
+      <section id="Patient Information">
+        <md-subheader class="md-warn"><md-icon md-svg-icon='./assets/svg/experiment-results.svg' style="padding-right:10px;"></md-icon>Patient Information</md-subheader>
+        <md-list class="md-dense" flex="">
+          <md-divider ></md-divider>
+          <md-list-item class="md-3-line">
+            <div class="md-list-item-text">
+              <h3><b>Gender:</b> {{patientDetail.patient.gender}}</h3>
+              <h3><b>DOB:</b> {{patientDetail.patient.birthDate}}</h3>
+              <md-divider ></md-divider>
+            </div>
+          </md-list-item>
+          <md-list-item class="md-3-line">
+            <div class="md-list-item-text">
+              <h3><b>Contact information:</b></h3>
+              <div ng-repeat="telecom in patientDetail.patient.telecom">
+                <h3><b>{{telecom.system + ': '}}</b>{{telecom.value}}</h3>
+              </div>
+              <md-divider ></md-divider>
+            </div>
+          </md-list-item>
+          <md-list-item class="md-3-line">
+            <div class="md-list-item-text">
+              <h3><b>Address:</b> {{patientDetail.patient.address[0].line[0]}}</h3>
+              <h3><b>City</b> {{patientDetail.patient.address[0].city}}</h3>
+              <h3><b>State:</b> {{patientDetail.patient.address[0].state + ', ' +patientDetail.patient.address[0].postalCode}}</h3>
+              <md-divider ></md-divider>
+            </div>
+          </md-list-item>
+        </md-list>
+      </section>
+    </md-card>
 
-        <md-sidenav  ng-click="ul.toggleList()" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left" style="background-color:#424242;" >
-          <md-list flex="" >
-            <md-list-item>               
-              <md-subheader style="background-color:#424242;">
-                <h3 style="color:white;"><b>{{patientDetail.patient.name[0].given + ' '+ patientDetail.patient.name[0].family}}</b></h3>
-              </md-subheader> 
-            </md-list-item>     
-            <md-subheader style="background-color:#424242;color:white;"><md-icon md-svg-icon='./assets/svg/ic_storage.svg' style="padding-right:10px;"></md-icon>Table of Contents</md-subheader>
-            <md-list-item>
-                <md-button class="md-raised md-accent md-hue-1" ng-click="patientDetail.scrollTo('Patient Information')" ng-class="{'selected' : false }" >
-                 Patient Information
-                </md-button>
-            </md-list-item>
-            <md-list-item>
-                <md-button class="md-raised md-accent md-hue-1" ng-click="patientDetail.scrollTo('Conditions')" ng-class="{'selected' : false }">
-                 Conditions
-                </md-button>
-            </md-list-item>
-            <md-list-item>
-                <md-button class="md-raised md-accent md-hue-1" ng-click="patientDetail.scrollTo('Prescriptions')" ng-class="{'selected' : false }">
-                 Prescriptions
-                </md-button>
-            </md-list-item>
-            <md-list-item>
-                <md-button class="md-raised md-accent md-hue-1" ng-click="patientDetail.scrollTo('Procedures')" ng-class="{'selected' : false }">
-                 Procedures
-                </md-button>
-            </md-list-item>
-          </md-list>
-        </md-sidenav>
-
-        <md-content flex>
-        
-
-
-  <md-toolbar class="md-warn">
-    <h2 class="md-toolbar-tools">
-      <span>Summary of Care:</span>
-    </h2>
-  </md-toolbar>
-<md-card>
-    <section id="Patient Information">
-
-      <md-subheader class="md-warn"><md-icon md-svg-icon='./assets/svg/experiment-results.svg' style="padding-right:10px;"></md-icon>Patient Information</md-subheader>
-      <md-list class="md-dense" flex="">
+    <md-card>
+      <section id="Conditions">
+        <md-subheader class="md-primary"><md-icon md-svg-icon='./assets/svg/heart-beats.svg' style="padding-right:10px;"></md-icon>Conditions</md-subheader>
         <md-divider ></md-divider>
-          <md-list-item class="md-3-line">
-          <div class="md-list-item-text">
-            <h3><b>Gender:</b> {{patientDetail.patient.gender}}</h3>
-            <h3><b>DOB:</b> {{patientDetail.patient.birthDate}}</h3>
-            <md-divider ></md-divider>
-          </div>
-          </md-list-item>
-          <md-list-item class="md-3-line">
-          <div class="md-list-item-text">
-            <h3><b>Contact information:</b></h3>
-            <div ng-repeat="telecom in patientDetail.patient.telecom">
-            <h3><b>{{telecom.system + ': '}}</b>{{telecom.value}}</h3>
+        <div ng-hide="patientDetail.isConditionsReturned" style="position: relative;"><span us-spinner></span></div>
+        <md-list class="md-dense" flex="">
+          <md-list-item class="md-3-line" ng-repeat="condition in patientDetail.conditionEntries">
+            <div class="md-list-item-text">           
+              <h3>{{condition.resource.code.coding[0].display + ' ' + condition.resource.code.coding[0].code}}</h3>
+              <p><b>Status: </b> {{condition.resource.verificationStatus}}</p>
+              <p></p>
+              <md-divider ></md-divider>
             </div>
-            <md-divider ></md-divider>
-          </div>
           </md-list-item>
-          <md-list-item class="md-3-line">
-          <div class="md-list-item-text">
-            <h3><b>Address:</b> {{patientDetail.patient.address[0].line[0]}}</h3>
-            <h3><b>City</b> {{patientDetail.patient.address[0].city}}</h3>
-            <h3><b>State:</b> {{patientDetail.patient.address[0].state + ', ' +patientDetail.patient.address[0].postalCode}}</h3>
-            <md-divider ></md-divider>
-          </div>
-          </md-list-item>
-      </md-list>
-    </section>
-</md-card>
-<md-card>
-    <section id="Conditions">
-      <md-subheader class="md-primary"><md-icon md-svg-icon='./assets/svg/heart-beats.svg' style="padding-right:10px;"></md-icon>Conditions</md-subheader>
-      <md-divider ></md-divider>
-      <md-list class="md-dense" flex="">
-        <md-list-item class="md-3-line" ng-repeat="condition in patientDetail.conditionEntries">
-          <div class="md-list-item-text">           
-           <h3>{{condition.resource.code.coding[0].display + ' ' + condition.resource.code.coding[0].code}}</h3>
-           <p><b>Status: </b> {{condition.resource.verificationStatus}}</p>
-           <p></p>
-          <md-divider ></md-divider>
-          </div>
-        </md-list-item>
-      </md-list>
-    </section>
-</md-card>
-<md-card>
-    <section id="Prescriptions">
-      <md-subheader class="md-warn"><md-icon md-svg-icon='./assets/svg/pills.svg' style="padding-right:10px;"></md-icon>Prescriptions</md-subheader>
-      <md-divider ></md-divider>
-      <md-list class="md-dense" flex="">
-        <md-list-item class="md-3-line" ng-repeat="prescription in patientDetail.prescriptionEntries">
-           <div class="md-list-item-text">
-           <h3><b>Medication: </b> {{ patientDetail.medications[$index].code.coding[0].display}}</h3>
-           <p><b>Dose: </b>  {{prescription.resource.dosageInstruction[0].doseQuantity.value}}</p>
-           <p><b>Route:</b>  {{prescription.resource.dosageInstruction[0].route.coding[0].display}}</p>
-          <md-divider ></md-divider>
-           </div>
-        </md-list-item>
-      </md-list>
-    </section>
-</md-card>
-<md-card>
-    <section id="Procedures">
-      <md-subheader class="md-primary"><md-icon md-svg-icon='./assets/svg/scalpel.svg' style="padding-right:10px;"></md-icon>Procedures</md-subheader>
-      <md-divider ></md-divider>
-      <md-list class="md-dense" flex="">
-        <md-list-item class="md-3-line" ng-repeat="procedure in patientDetail.procedureEntries">
-          <div class="md-list-item-text" >
-           <h3>{{procedure.resource.code.coding[0].display + ' ' + procedure.resource.code.coding[0].code}} </h3>
-           <p><b>Performed on:</b> {{procedure.resource.performedDateTime}} <b>Reason: </b>{{procedure.resource.reasonCodeableConcept.text}}</p>
-           <p><b>Performed by:</b> {{procedure.resource.performer.actor[0].display}}</p>
-          <md-divider ></md-divider>
-          </div>
-        </md-list-item>
-      </md-list>
-    </section>
-</md-card>
+        </md-list>
+      </section>
+    </md-card>
 
-        </md-content>
-
-
-
+    <md-card>
+      <section id="Prescriptions">
+        <md-subheader class="md-warn"><md-icon md-svg-icon='./assets/svg/pills.svg' style="padding-right:10px;"></md-icon>Prescriptions</md-subheader>
+        <md-divider ></md-divider>
+        <div ng-hide="patientDetail.isPrescriptionsReturned" style="position: relative;"><span us-spinner></span></div>
+        <md-list class="md-dense" flex="">
+          <md-list-item class="md-3-line" ng-repeat="prescription in patientDetail.prescriptionEntries">
+            <div class="md-list-item-text">
+              <h3><b>Medication: </b> {{ patientDetail.medications[$index].code.coding[0].display}}</h3>
+              <p><b>Dose: </b>  {{prescription.resource.dosageInstruction[0].doseQuantity.value}}</p>
+              <p><b>Route:</b>  {{prescription.resource.dosageInstruction[0].route.coding[0].display}}</p>
+              <md-divider ></md-divider>
             </div>
+          </md-list-item>
+        </md-list>
+      </section>
+    </md-card>
+
+    <md-card>
+      <section id="Procedures">
+        <md-subheader class="md-primary"><md-icon md-svg-icon='./assets/svg/scalpel.svg' style="padding-right:10px;"></md-icon>Procedures</md-subheader>
+        <md-divider ></md-divider>
+        <div ng-hide="patientDetail.isProceduresReturned" style="position: relative;"><span us-spinner></span></div>
+        <md-list class="md-dense" flex="">
+          <md-list-item class="md-3-line" ng-repeat="procedure in patientDetail.procedureEntries">
+            <div class="md-list-item-text" >
+              <h3>{{procedure.resource.code.coding[0].display + ' ' + procedure.resource.code.coding[0].code}} </h3>
+              <p><b>Performed on:</b> {{procedure.resource.performedDateTime}} <b>Reason: </b>{{procedure.resource.reasonCodeableConcept.text}}</p>
+              <p><b>Performed by:</b> {{procedure.resource.performer.actor[0].display}}</p>
+              <md-divider ></md-divider>
+            </div>
+          </md-list-item>
+        </md-list>
+      </section>
+    </md-card>
+
+  </md-content>
+</div>
