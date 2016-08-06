@@ -2,48 +2,21 @@
 
 /* Services */
 
-var patientServices = angular.module('patientServices', ['ngResource']);
+var resourceByIdServices = angular.module('resourceByIdServices', ['ngResource']);
 
-patientServices.factory('Patient', ['$resource',
+resourceByIdServices.factory('ResourceById', ['$resource',
   function($resource){
-    return $resource('http://www.fhirbridge.net/Patient/:id', {}, {
-      query: {method:'GET', params:{id:'patients'}, isArray:false, headers:{'Accept':'application/json; charset=UTF-8'} }
+    return $resource('http://www.fhirbridge.net/:resource/:id', {}, {
+      query: {method:'GET', params:{id:'id', resource: 'resource'}, isArray:false, headers:{'Accept':'application/json; charset=UTF-8'} }
     });
   }]);
 
-var patientListServices = angular.module('patientListServices', ['ngResource']);
+var resourceListServices = angular.module('resourceListServices', ['ngResource']);
 
-patientListServices.factory('PatientList', ['$resource',
+resourceListServices.factory('Resources', ['$resource',
   function($resource){
-    return $resource('http://www.fhirbridge.net/Patient', {}, {
-      query: {method:'GET', params:{}, isArray:false, headers:{'Accept':'application/json; charset=UTF-8'} }
-    });
-  }]);
-
-var conditionListServices = angular.module('conditionListServices', ['ngResource']);
-
-conditionListServices.factory('ConditionList', ['$resource',
-  function($resource){
-    return $resource('http://www.fhirbridge.net/Condition?patient=:id', {}, {
-      query: {method:'GET', params:{id:'patients'}, isArray:false, headers:{'Accept':'application/json; charset=UTF-8'} }
-    });
-  }]);
-
-var prescriptionListServices = angular.module('prescriptionListServices', ['ngResource']);
-
-prescriptionListServices.factory('PrescriptionList', ['$resource',
-  function($resource){
-    return $resource('http://www.fhirbridge.net/MedicationPrescription?patient=:id', {}, {
-      query: {method:'GET', params:{id:'patients'}, isArray:false, headers:{'Accept':'application/json; charset=UTF-8'} }
-    });
-  }]);
-
-var medicationServices = angular.module('medicationServices', ['ngResource']);
-
-medicationServices.factory('Medication', ['$resource',
-  function($resource){
-    return $resource('http://www.fhirbridge.net/Medication/:id', {}, {
-      query: {method:'GET', params:{id:'patients'}, isArray:false, headers:{'Accept':'application/json; charset=UTF-8'} }
+    return $resource('http://www.fhirbridge.net/:resource?patient=:id', {}, {
+      query: {method:'GET', params:{id:'patients', resource: 'resource'}, isArray:false, headers:{'Accept':'application/json; charset=UTF-8'} }
     });
   }]);
 

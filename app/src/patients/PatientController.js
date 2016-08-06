@@ -27,55 +27,50 @@ patientControllers.controller('PatientListCtrl', ['PatientList', '$mdSidenav', '
 
 }]);
 
-patientControllers.controller('PatientDetailCtrl', ['Patient', '$mdSidenav', '$routeParams', 'ConditionList', 'PrescriptionList', 'Medication', 'ProcedureList', '$location', '$anchorScroll',
-  function (Patient, $mdSidenav, $routeParams, ConditionList, PrescriptionList, Medication, ProcedureList, $location, $anchorScroll) {
+patientControllers.controller('PatientDetailCtrl', ['$routeParams', 'Resources', 'ResourceById',
+  function ($routeParams, Resources, ResourceById) {
   var patientDetail = this;
   patientDetail.medications = [];
-  var category = '';
+  var section = '';
 
-
-  patientDetail.isSelectedCategory = function(category) {
-    if (category == patientDetail.category) {
-      return true;
-    } else {
-      return false;
-    }
-
+  patientDetail.getSelectedSection = function() {
+    return patientDetail.section;
   };
 
-  patientDetail.scrollTo = function(category) {
-    
-    if (category != patientDetail.category) {
-      patientDetail.category = category;  
-    } else {
-      patientDetail.category = ''; // Clear the category if the button is clicked again
-    }
-
-
-    var old = $location.hash();
-    $location.hash(category);
-    $anchorScroll();
-    $location.hash(old);
+  patientDetail.setSelectedSection = function(section) {
+    patientDetail.section = section;
   };
 
-  Patient.get({id: $routeParams.id})
+  ResourceById.get({id: $routeParams.id, resource: 'Patient'})
     .$promise.then(function(patient) {
       patientDetail.patient = patient;
     });
+
+  Resources.get({id: $routeParams.id, resource: 'AllergyIntolerance'})
+    .$promise.then(function(allergies) {
+      patientDetail.isAllergiesReturned = allergies.$resolved;
+      patientDetail.allergyEntries = allergies.entry;
+    });
+
+  Resources.get({id: $routeParams.id, resource: 'Encounter'})
+    .$promise.then(function(encounters) {
+      patientDetail.isEncountersReturned = encounters.$resolved;
+      patientDetail.encounterEntries = encounters.entry;
+    });
   
-  ConditionList.get({id: $routeParams.id})
+  Resources.get({id: $routeParams.id, resource: 'Condition'})
     .$promise.then(function(conditions) {
       patientDetail.isConditionsReturned = conditions.$resolved;
       patientDetail.conditionEntries = conditions.entry;
     });
 
-  ProcedureList.get({id: $routeParams.id})
+  Resources.get({id: $routeParams.id, resource: 'Procedure'})
     .$promise.then(function(procedures) {
       patientDetail.isProceduresReturned = procedures.$resolved;
       patientDetail.procedureEntries = procedures.entry;
     });
 
-  PrescriptionList.get({id: $routeParams.id})
+  Resources.get({id: $routeParams.id, resource: 'MedicationPrescription'})
    .$promise.then(function(prescriptions) {
     patientDetail.isPrescriptionsReturned = prescriptions.$resolved;
     patientDetail.prescriptionEntries = prescriptions.entry;
@@ -86,15 +81,13 @@ patientControllers.controller('PatientDetailCtrl', ['Patient', '$mdSidenav', '$r
       var slashIndex = medicationRef.indexOf("/");
       var medicationId = medicationRef.substring((slashIndex +1), medicationRef.length);
 
-      Medication.get({id: medicationId})
+      ResourceById.get({id: medicationId, resource: 'Medication'})
         .$promise.then(function(med) {
           patientDetail.medications.push(med);
       });
     });
 
   });
-
-  patientDetail.tableOfContents = ['Conditions', 'Medications', 'Operations & Surgeries', 'Lab results', 'Problems', 'Allergies', 'Social status'];
 
 }]);
 

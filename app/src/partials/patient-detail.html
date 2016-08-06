@@ -7,26 +7,18 @@
         </md-subheader> 
       </md-list-item>     
       <md-subheader style="background-color:#424242;color:white;"><md-icon md-svg-icon='./assets/svg/ic_storage.svg' style="padding-right:10px;"></md-icon>Table of Contents</md-subheader>
-      <md-list-item>
-        <md-button class="md-primary" ng-click="patientDetail.scrollTo('Patient Information')" ng-class="patientDetail.isSelectedCategory('Patient Information') ? 'selected': 'unselected'">
-          Patient Information
-        </md-button>
-      </md-list-item>
-      <md-list-item>
-        <md-button class="md-primary" ng-click="patientDetail.scrollTo('Conditions')" ng-class="patientDetail.isSelectedCategory('Conditions') ? 'selected' : 'unselected'">
-          Conditions
-        </md-button>
-      </md-list-item>
-      <md-list-item>
-        <md-button class="md-primary" ng-click="patientDetail.scrollTo('Prescriptions')" ng-class="patientDetail.isSelectedCategory('Prescriptions') ? 'selected' : 'unselected'">
-          Prescriptions
-        </md-button>
-      </md-list-item>
-      <md-list-item>
-        <md-button class="md-primary" ng-click="patientDetail.scrollTo('Procedures')" ng-class="patientDetail.isSelectedCategory('Procedures') ? 'selected' : 'unselected'">
-          Procedures
-        </md-button>
-      </md-list-item>
+     <contents-button section="'Patient Information'" get-fn="patientDetail.getSelectedSection()" set-fn="patientDetail.setSelectedSection(arg1)">
+     </contents-button>
+     <contents-button section="'Allergies'" get-fn="patientDetail.getSelectedSection()" set-fn="patientDetail.setSelectedSection(arg1)">
+     </contents-button>
+     <contents-button section="'Encounters'" get-fn="patientDetail.getSelectedSection()" set-fn="patientDetail.setSelectedSection(arg1)">
+     </contents-button>
+     <contents-button section="'Conditions'" get-fn="patientDetail.getSelectedSection()" set-fn="patientDetail.setSelectedSection(arg1)">
+     </contents-button>
+     <contents-button section="'Prescriptions'" get-fn="patientDetail.getSelectedSection()" set-fn="patientDetail.setSelectedSection(arg1)">
+     </contents-button>
+     <contents-button section="'Procedures'" get-fn="patientDetail.getSelectedSection()" set-fn="patientDetail.setSelectedSection(arg1)">
+     </contents-button>
     </md-list>
   </md-sidenav>
   
@@ -64,6 +56,47 @@
               <h3><b>Address:</b> {{patientDetail.patient.address[0].line[0]}}</h3>
               <h3><b>City</b> {{patientDetail.patient.address[0].city}}</h3>
               <h3><b>State:</b> {{patientDetail.patient.address[0].state + ', ' +patientDetail.patient.address[0].postalCode}}</h3>
+              <md-divider ></md-divider>
+            </div>
+          </md-list-item>
+        </md-list>
+      </section>
+    </md-card>
+
+    <md-card>
+      <section id="Allergies">
+        <md-subheader class="md-primary"><md-icon md-svg-icon='' style="padding-right:10px;"></md-icon>Allergies</md-subheader>
+        <md-divider ></md-divider>
+        <div ng-hide="patientDetail.isAllergiesReturned" style="position: relative;"><span us-spinner></span></div>
+        <md-list class="md-dense" flex="">
+          <md-list-item class="md-3-line" ng-repeat="allergy in patientDetail.allergyEntries">
+            <div class="md-list-item-text">           
+              <h3>{{allergy.resource.substance.coding[0].display + ' ' + allergy.resource.substance.coding[0].code}}</h3>
+              <p><b>Allergy type: </b> {{allergy.resource.category}}</p>
+              <p><b>Reaction: </b>{{allergy.resource.reaction[0].manifestation[0].coding[0].display}}
+              <b>Severity: </b>{{allergy.resource.reaction[0].severity}}</p>
+              <md-divider ></md-divider>
+            </div>
+          </md-list-item>
+        </md-list>
+      </section>
+    </md-card>
+    
+    <details-card title="'Allergies'" resource="'AllergyIntolerance'">
+    </details-card>
+
+    <md-card>
+      <section id="Encounters">
+        <md-subheader class="md-primary"><md-icon md-svg-icon='' style="padding-right:10px;"></md-icon>Encounters</md-subheader>
+        <md-divider ></md-divider>
+        <div ng-hide="patientDetail.isEncountersReturned" style="position: relative;"><span us-spinner></span></div>
+        <md-list class="md-dense" flex="">
+          <md-list-item class="md-3-line" ng-repeat="encounter in patientDetail.encounterEntries">
+            <div class="md-list-item-text">           
+              <h3><b>{{encounter.resource.type[0].coding[0].display + ' ' + encounter.resource.type[0].coding[0].code}}</b></h3>
+              <p><b>Reason: </b> {{encounter.resource.reason[0].text}}</p>
+              <p><b>DOS: </b>{{encounter.resource.period.start +' to '+encounter.resource.period.end}}
+              <b>Provider: </b>{{encounter.resource.serviceProvider.reference}}</p>
               <md-divider ></md-divider>
             </div>
           </md-list-item>
