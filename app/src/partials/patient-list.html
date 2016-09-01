@@ -1,9 +1,9 @@
        
   <div flex layout="row">
-        <md-sidenav  ng-click="ul.toggleList()" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left" style="background-color:#424242;">
+        <md-sidenav  class="md-sidenav-left" md-whiteframe="4" ng-click="ul.toggleList()" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left" >
           <md-list>
             <md-list-item ng-repeat="patient in patients.patientEntries() | filter:query">
-                <md-button ng-click="patients.selectPatient(patient)" ng-class="{'selected' : patient === patients.selected }" class="md-raised md-accent">
+                <md-button ng-click="patients.selectPatient(patient)" ng-class="{'selected' : patient === patients.selected }" class="md-raised md-primary md-hue-1">
                   {{patient.resource.name[0].given + ' '+ patient.resource.name[0].family}}
                 </md-button>
             </md-list-item>

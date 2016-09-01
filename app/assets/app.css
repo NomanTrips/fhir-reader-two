@@ -27,18 +27,18 @@ md-toolbar h3 {
 md-list-item > button {
   width:100%;
   text-align:left !important;
-  color:white;
-  background-color:#616161;
+
+  /*background-color:#616161;#424242 */ 
 }
 
   md-list .md-button.unselected {
-    color:white;
-    background-color: #616161;
+
+   /* background-color: #616161;*/
   }
 
   md-list .md-button.selected {
-    color:white;
-    background-color: #B0B0B0;
+
+   /* background-color: #B0B0B0;*/
   }
 
 

@@ -1,12 +1,24 @@
 <div flex layout="row">
-  <md-sidenav  ng-click="ul.toggleList()" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left" style="background-color:#424242;" >
+  <md-sidenav  class="md-sidenav-left" md-whiteframe="4" ng-click="ul.toggleList()" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left" >
+
+      <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch="">
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">{{patientDetail.patient.name[0].given + ' '+ patientDetail.patient.name[0].family}}</span>
+            <span class="md-subhead">{{patientDetail.patient.gender}} &nbsp;&nbsp; <b> DOB: </b>{{patientDetail.patient.birthDate}}</span>
+          </md-card-title-text>
+          <md-card-title-media>
+            <div class="md-media-sm card-media"></div>
+          </md-card-title-media>
+        </md-card-title>
+        <md-card-actions layout="row" layout-align="end center">
+          <md-button>Action 1</md-button>
+          <md-button>Action 2</md-button>
+        </md-card-actions>
+      </md-card>
+
     <md-list flex="" >
-      <md-list-item>               
-        <md-subheader style="background-color:#424242;">
-          <h3 style="color:white;"><b>Patient: </b>{{patientDetail.patient.name[0].given + ' '+ patientDetail.patient.name[0].family}}</h3>
-        </md-subheader> 
-      </md-list-item>     
-      <md-subheader style="background-color:#424242;color:white;"><md-icon md-svg-icon='./assets/svg/ic_storage.svg' style="padding-right:10px;"></md-icon>Table of Contents</md-subheader>
+    <div><h3 style="text-align:center;"><md-icon md-svg-icon='./assets/svg/list.svg' style="padding-right:10px;"></md-icon> Table of Contents<h3></div>
      <contents-button section="'Patient Information'" get-fn="patientDetail.getSelectedSection()" set-fn="patientDetail.setSelectedSection(arg1)">
      </contents-button>
      <contents-button section="'Allergies'" get-fn="patientDetail.getSelectedSection()" set-fn="patientDetail.setSelectedSection(arg1)">
@@ -24,7 +36,7 @@
   
   <md-content flex>
   
-    <md-toolbar class="md-warn">
+    <md-toolbar class="md-accent">
       <h2 class="md-toolbar-tools">
         <span>Summary of Care:</span>
       </h2>
@@ -32,32 +44,13 @@
 
     <md-card>
       <section id="Patient Information">
-        <md-subheader class="md-warn"><md-icon md-svg-icon='./assets/svg/experiment-results.svg' style="padding-right:10px;"></md-icon>Patient Information</md-subheader>
-        <md-list class="md-dense" flex="">
-          <md-divider ></md-divider>
+        <md-subheader class="md-primary"><md-icon md-svg-icon='./assets/svg/experiment-results.svg' style="padding-right:10px;"></md-icon>Patient Information</md-subheader>
+        <md-divider ></md-divider>
+        <div ng-show="patientDetail.patient == undefined" style="position: relative;"><span us-spinner></span></div>
+        <md-list flex="">
           <md-list-item class="md-3-line">
-            <div class="md-list-item-text">
-              <h3><b>Gender:</b> {{patientDetail.patient.gender}}</h3>
-              <h3><b>DOB:</b> {{patientDetail.patient.birthDate}}</h3>
-              <md-divider ></md-divider>
-            </div>
-          </md-list-item>
-          <md-list-item class="md-3-line">
-            <div class="md-list-item-text">
-              <h3><b>Contact information:</b></h3>
-              <div ng-repeat="telecom in patientDetail.patient.telecom">
-                <h3><b>{{telecom.system + ': '}}</b>{{telecom.value}}</h3>
-              </div>
-              <md-divider ></md-divider>
-            </div>
-          </md-list-item>
-          <md-list-item class="md-3-line">
-            <div class="md-list-item-text">
-              <h3><b>Address:</b> {{patientDetail.patient.address[0].line[0]}}</h3>
-              <h3><b>City</b> {{patientDetail.patient.address[0].city}}</h3>
-              <h3><b>State:</b> {{patientDetail.patient.address[0].state + ', ' +patientDetail.patient.address[0].postalCode}}</h3>
-              <md-divider ></md-divider>
-            </div>
+            <resource-item resource="'Patient'" entry="patientDetail.patient" last="true">
+            </resource-item>
           </md-list-item>
         </md-list>
       </section>
@@ -65,77 +58,61 @@
 
     <md-card>
       <section id="Allergies">
-        <md-subheader class="md-primary"><md-icon md-svg-icon='' style="padding-right:10px;"></md-icon>Allergies</md-subheader>
+        <md-subheader class="md-warn"><md-icon md-svg-icon='./assets/svg/warning.svg' style="padding-right:10px;"></md-icon>Allergies</md-subheader>
         <md-divider ></md-divider>
-        <div ng-hide="patientDetail.isAllergiesReturned" style="position: relative;"><span us-spinner></span></div>
-        <md-list class="md-dense" flex="">
-          <md-list-item class="md-3-line" ng-repeat="allergy in patientDetail.allergyEntries">
-            <div class="md-list-item-text">           
-              <h3>{{allergy.resource.substance.coding[0].display + ' ' + allergy.resource.substance.coding[0].code}}</h3>
-              <p><b>Allergy type: </b> {{allergy.resource.category}}</p>
-              <p><b>Reaction: </b>{{allergy.resource.reaction[0].manifestation[0].coding[0].display}}
-              <b>Severity: </b>{{allergy.resource.reaction[0].severity}}</p>
-              <md-divider ></md-divider>
-            </div>
+        <div ng-hide="patientDetail.allergyEntries != undefined" style="position: relative;"><span us-spinner></span></div>
+        <md-list flex="">
+          <md-list-item class="md-3-line" ng-repeat="entry in patientDetail.allergyEntries">
+            <resource-item resource="'AllergyIntolerance'" entry="entry" last="$last">
+            </resource-item>
           </md-list-item>
+          <h3 ng-show="!patientDetail.allergyEntries.length && patientDetail.allergyEntries != undefined" style="text-align:center;">- N/A -<h3>
         </md-list>
       </section>
     </md-card>
     
-    <details-card title="'Allergies'" resource="'AllergyIntolerance'">
-    </details-card>
-
     <md-card>
       <section id="Encounters">
-        <md-subheader class="md-primary"><md-icon md-svg-icon='' style="padding-right:10px;"></md-icon>Encounters</md-subheader>
+        <md-subheader class="md-primary"><md-icon md-svg-icon='./assets/svg/hospital.svg' style="padding-right:10px;"></md-icon>Encounters</md-subheader>
         <md-divider ></md-divider>
-        <div ng-hide="patientDetail.isEncountersReturned" style="position: relative;"><span us-spinner></span></div>
-        <md-list class="md-dense" flex="">
-          <md-list-item class="md-3-line" ng-repeat="encounter in patientDetail.encounterEntries">
-            <div class="md-list-item-text">           
-              <h3><b>{{encounter.resource.type[0].coding[0].display + ' ' + encounter.resource.type[0].coding[0].code}}</b></h3>
-              <p><b>Reason: </b> {{encounter.resource.reason[0].text}}</p>
-              <p><b>DOS: </b>{{encounter.resource.period.start +' to '+encounter.resource.period.end}}
-              <b>Provider: </b>{{encounter.resource.serviceProvider.reference}}</p>
-              <md-divider ></md-divider>
-            </div>
+        <div ng-hide="patientDetail.encounterEntries != undefined" style="position: relative;"><span us-spinner></span></div>
+        <md-list flex="">
+          <md-list-item class="md-3-line" ng-repeat="entry in patientDetail.encounterEntries">
+            <resource-item resource="'Encounter'" entry="entry" last="$last">
+            </resource-item>
           </md-list-item>
+          <h3 ng-show="!patientDetail.encounterEntries.length && patientDetail.encounterEntries != undefined" style="text-align:center;">N/A <h3>
         </md-list>
       </section>
     </md-card>
 
     <md-card>
       <section id="Conditions">
-        <md-subheader class="md-primary"><md-icon md-svg-icon='./assets/svg/heart-beats.svg' style="padding-right:10px;"></md-icon>Conditions</md-subheader>
+        <md-subheader class="md-warn"><md-icon md-svg-icon='./assets/svg/heart-beats.svg' style="padding-right:10px;"></md-icon>Conditions</md-subheader>
         <md-divider ></md-divider>
-        <div ng-hide="patientDetail.isConditionsReturned" style="position: relative;"><span us-spinner></span></div>
-        <md-list class="md-dense" flex="">
-          <md-list-item class="md-3-line" ng-repeat="condition in patientDetail.conditionEntries">
-            <div class="md-list-item-text">           
-              <h3>{{condition.resource.code.coding[0].display + ' ' + condition.resource.code.coding[0].code}}</h3>
-              <p><b>Status: </b> {{condition.resource.verificationStatus}}</p>
-              <p></p>
-              <md-divider ></md-divider>
-            </div>
+        <div ng-show="patientDetail.conditionEntries == undefined" style="position: relative;"><span us-spinner></span></div>
+        <md-list flex="">
+          <md-list-item class="md-3-line" ng-repeat="entry in patientDetail.conditionEntries">
+            <resource-item resource="'Condition'" entry="entry" last="$last">
+            </resource-item>
           </md-list-item>
+          <h3 ng-show="!patientDetail.conditionEntries.length && patientDetail.conditionEntries != undefined" style="text-align:center;">N/A <h3>
         </md-list>
       </section>
     </md-card>
 
     <md-card>
       <section id="Prescriptions">
-        <md-subheader class="md-warn"><md-icon md-svg-icon='./assets/svg/pills.svg' style="padding-right:10px;"></md-icon>Prescriptions</md-subheader>
+        <md-subheader class="md-primary"><md-icon md-svg-icon='./assets/svg/pills.svg' style="padding-right:10px;"></md-icon>Prescriptions</md-subheader>
         <md-divider ></md-divider>
-        <div ng-hide="patientDetail.isPrescriptionsReturned" style="position: relative;"><span us-spinner></span></div>
-        <md-list class="md-dense" flex="">
-          <md-list-item class="md-3-line" ng-repeat="prescription in patientDetail.prescriptionEntries">
-            <div class="md-list-item-text">
-              <h3><b>Medication: </b> {{ patientDetail.medications[$index].code.coding[0].display}}</h3>
-              <p><b>Dose: </b>  {{prescription.resource.dosageInstruction[0].doseQuantity.value}}</p>
-              <p><b>Route:</b>  {{prescription.resource.dosageInstruction[0].route.coding[0].display}}</p>
-              <md-divider ></md-divider>
-            </div>
+        <div ng-hide="patientDetail.prescriptions != undefined" style="position: relative;"><span us-spinner></span></div>
+        <md-list flex="">
+          <md-list-item class="md-3-line" ng-repeat="entry in patientDetail.prescriptions">
+
+            <resource-item resource="'MedicationPrescription'" entry="entry" last="$last">
+            </resource-item>
           </md-list-item>
+          <h3 ng-show="!patientDetail.prescriptions.length && patientDetail.prescriptions != undefined" style="text-align:center;">N/A <h3>
         </md-list>
       </section>
     </md-card>
@@ -144,16 +121,13 @@
       <section id="Procedures">
         <md-subheader class="md-primary"><md-icon md-svg-icon='./assets/svg/scalpel.svg' style="padding-right:10px;"></md-icon>Procedures</md-subheader>
         <md-divider ></md-divider>
-        <div ng-hide="patientDetail.isProceduresReturned" style="position: relative;"><span us-spinner></span></div>
-        <md-list class="md-dense" flex="">
-          <md-list-item class="md-3-line" ng-repeat="procedure in patientDetail.procedureEntries">
-            <div class="md-list-item-text" >
-              <h3>{{procedure.resource.code.coding[0].display + ' ' + procedure.resource.code.coding[0].code}} </h3>
-              <p><b>Performed on:</b> {{procedure.resource.performedDateTime}} <b>Reason: </b>{{procedure.resource.reasonCodeableConcept.text}}</p>
-              <p><b>Performed by:</b> {{procedure.resource.performer.actor[0].display}}</p>
-              <md-divider ></md-divider>
-            </div>
+        <div ng-hide="patientDetail.procedureEntries != undefined" style="position: relative;"><span us-spinner></span></div>
+        <md-list flex="">
+          <md-list-item class="md-3-line" ng-repeat="entry in patientDetail.procedureEntries">
+            <resource-item resource="'Procedure'" entry="entry" last="$last">
+            </resource-item>
           </md-list-item>
+          <h3 ng-show="!patientDetail.procedureEntries.length && patientDetail.procedureEntries != undefined" style="text-align:center;">N/A <h3>
         </md-list>
       </section>
     </md-card>

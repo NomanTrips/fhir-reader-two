@@ -1,29 +1,29 @@
 <div flex layout="row">
-  <md-sidenav  ng-click="ul.toggleList()" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left" style="background-color:#424242;" >
+  <md-sidenav  class="md-sidenav-left" md-whiteframe="4" ng-click="ul.toggleList()" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left">
     <md-list flex="" >
       <md-subheader style="background-color:#424242;color:white;">Availible Resources:</md-subheader>
       <md-list-item>
-        <md-button class="md-primary" ng-click="resources.loadResources('Patient');showResources = ! resources.isNoneSelected();" ng-class="resources.isSelectedType('Patient') ? 'selected' : 'unselected'">
+        <md-button class="md-raised md-primary md-hue-1" ng-click="resources.loadResources('Patient');showResources = ! resources.isNoneSelected();" ng-class="resources.isSelectedType('Patient') ? 'selected' : 'unselected'">
           Patients
         </md-button>
       </md-list-item>
       <md-list-item>
-        <md-button class="md-primary" ng-click="resources.loadResources('Condition');showResources = ! resources.isNoneSelected();" ng-class="resources.isSelectedType('Condition') ? 'selected' : 'unselected'">
+        <md-button class="md-raised md-primary md-hue-1" ng-click="resources.loadResources('Condition');showResources = ! resources.isNoneSelected();" ng-class="resources.isSelectedType('Condition') ? 'selected' : 'unselected'">
           Conditions
         </md-button>
       </md-list-item>
       <md-list-item>
-        <md-button class="md-primary" ng-click="resources.loadResources('Procedure');showResources = ! resources.isNoneSelected();" ng-class="resources.isSelectedType('Procedure') ? 'selected' : 'unselected'">
+        <md-button class="md-raised md-primary md-hue-1" ng-click="resources.loadResources('Procedure');showResources = ! resources.isNoneSelected();" ng-class="resources.isSelectedType('Procedure') ? 'selected' : 'unselected'">
           Procedures
         </md-button>
       </md-list-item>
       <md-list-item>
-        <md-button class="md-primary" ng-click="resources.loadResources('MedicationPrescription');showResources = ! resources.isNoneSelected();" ng-class="resources.isSelectedType('MedicationPrescription') ? 'selected' : 'unselected'">
+        <md-button class="md-raised md-primary md-hue-1" ng-click="resources.loadResources('MedicationPrescription');showResources = ! resources.isNoneSelected();" ng-class="resources.isSelectedType('MedicationPrescription') ? 'selected' : 'unselected'">
           Medication Prescriptions
         </md-button>
       </md-list-item>
       <md-list-item>
-        <md-button class="md-primary" ng-click="resources.loadResources('Medication');showResources = ! resources.isNoneSelected();" ng-class="resources.isSelectedType('Medication') ? 'selected' : 'unselected'">
+        <md-button class="md-raised md-primary md-hue-1" ng-click="resources.loadResources('Medication');showResources = ! resources.isNoneSelected();" ng-class="resources.isSelectedType('Medication') ? 'selected' : 'unselected'">
           Medication
         </md-button>
       </md-list-item>
@@ -46,7 +46,7 @@
       </section>
     </md-card>
 
-    <md-toolbar class="md-primary" ng-show="showResources">
+    <md-toolbar class="md-accent" ng-show="showResources">
       <div class="md-toolbar-tools">
         <h2 flex="2">
           {{resources.resourceType + 's:'}}

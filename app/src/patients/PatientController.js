@@ -27,11 +27,53 @@ patientControllers.controller('PatientListCtrl', ['PatientList', '$mdSidenav', '
 
 }]);
 
-patientControllers.controller('PatientDetailCtrl', ['$routeParams', 'Resources', 'ResourceById',
-  function ($routeParams, Resources, ResourceById) {
+patientControllers.controller('PatientDetailCtrl', ['$routeParams', 'fhirCalls',
+  function ($routeParams, fhirCalls) {
   var patientDetail = this;
-  patientDetail.medications = [];
   var section = '';
+
+  fhirCalls.fhirSearch($routeParams.id, 'AllergyIntolerance')
+     .then(function(entries){
+        patientDetail.allergyEntries = entries;
+     });
+
+  fhirCalls.fhirSearch($routeParams.id, 'Encounter')
+     .then(function(entries){
+        patientDetail.encounterEntries = entries;
+     });
+
+  fhirCalls.fhirSearch($routeParams.id, 'Condition')
+     .then(function(entries){
+        patientDetail.conditionEntries = entries;
+     });
+
+  fhirCalls.fhirSearch($routeParams.id, 'Procedure')
+     .then(function(entries){
+        patientDetail.procedureEntries = entries;
+     });
+
+  fhirCalls.fhirGet($routeParams.id, 'Patient')
+     .then(function(patient){
+        patientDetail.patient = patient;
+     });
+
+  fhirCalls.fhirSearch($routeParams.id, 'MedicationPrescription')
+    .then(function(entries){
+      patientDetail.prescriptions = entries;
+     
+      angular.forEach(patientDetail.prescriptions, function(value, key) {
+        var medicationRef = value.resource.medication.reference;
+        var slashIndex = medicationRef.indexOf("/");
+        var medicationId = medicationRef.substring((slashIndex +1), medicationRef.length);
+
+        fhirCalls.fhirGet(medicationId, 'Medication')
+          .then(function(med){
+            value.medication = med;
+          });
+
+      });
+
+    });
 
   patientDetail.getSelectedSection = function() {
     return patientDetail.section;
@@ -40,54 +82,6 @@ patientControllers.controller('PatientDetailCtrl', ['$routeParams', 'Resources',
   patientDetail.setSelectedSection = function(section) {
     patientDetail.section = section;
   };
-
-  ResourceById.get({id: $routeParams.id, resource: 'Patient'})
-    .$promise.then(function(patient) {
-      patientDetail.patient = patient;
-    });
-
-  Resources.get({id: $routeParams.id, resource: 'AllergyIntolerance'})
-    .$promise.then(function(allergies) {
-      patientDetail.isAllergiesReturned = allergies.$resolved;
-      patientDetail.allergyEntries = allergies.entry;
-    });
-
-  Resources.get({id: $routeParams.id, resource: 'Encounter'})
-    .$promise.then(function(encounters) {
-      patientDetail.isEncountersReturned = encounters.$resolved;
-      patientDetail.encounterEntries = encounters.entry;
-    });
-  
-  Resources.get({id: $routeParams.id, resource: 'Condition'})
-    .$promise.then(function(conditions) {
-      patientDetail.isConditionsReturned = conditions.$resolved;
-      patientDetail.conditionEntries = conditions.entry;
-    });
-
-  Resources.get({id: $routeParams.id, resource: 'Procedure'})
-    .$promise.then(function(procedures) {
-      patientDetail.isProceduresReturned = procedures.$resolved;
-      patientDetail.procedureEntries = procedures.entry;
-    });
-
-  Resources.get({id: $routeParams.id, resource: 'MedicationPrescription'})
-   .$promise.then(function(prescriptions) {
-    patientDetail.isPrescriptionsReturned = prescriptions.$resolved;
-    patientDetail.prescriptionEntries = prescriptions.entry;
-    
-    angular.forEach(patientDetail.prescriptionEntries, function(value, key) {
-  
-      var medicationRef = value.resource.medication.reference;
-      var slashIndex = medicationRef.indexOf("/");
-      var medicationId = medicationRef.substring((slashIndex +1), medicationRef.length);
-
-      ResourceById.get({id: medicationId, resource: 'Medication'})
-        .$promise.then(function(med) {
-          patientDetail.medications.push(med);
-      });
-    });
-
-  });
 
 }]);
 
