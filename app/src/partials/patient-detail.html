@@ -18,18 +18,26 @@
       </md-card>
 
     <md-list flex="" >
-    <div><h3 style="text-align:center;"><md-icon md-svg-icon='./assets/svg/list.svg' style="padding-right:10px;"></md-icon> Table of Contents<h3></div>
+    <span style="padding-left:20px;">
+     <md-icon md-svg-icon='./assets/svg/list.svg' ></md-icon> Table of Contents
+    </span>
      <contents-button section="'Patient Information'" get-fn="patientDetail.getSelectedSection()" set-fn="patientDetail.setSelectedSection(arg1)">
      </contents-button>
      <contents-button section="'Allergies'" get-fn="patientDetail.getSelectedSection()" set-fn="patientDetail.setSelectedSection(arg1)">
      </contents-button>
      <contents-button section="'Encounters'" get-fn="patientDetail.getSelectedSection()" set-fn="patientDetail.setSelectedSection(arg1)">
      </contents-button>
+     <contents-button section="'Immunizations'" get-fn="patientDetail.getSelectedSection()" set-fn="patientDetail.setSelectedSection(arg1)">
+     </contents-button>
      <contents-button section="'Conditions'" get-fn="patientDetail.getSelectedSection()" set-fn="patientDetail.setSelectedSection(arg1)">
      </contents-button>
      <contents-button section="'Prescriptions'" get-fn="patientDetail.getSelectedSection()" set-fn="patientDetail.setSelectedSection(arg1)">
      </contents-button>
      <contents-button section="'Procedures'" get-fn="patientDetail.getSelectedSection()" set-fn="patientDetail.setSelectedSection(arg1)">
+     </contents-button>
+     <contents-button section="'Lab Results'" get-fn="patientDetail.getSelectedSection()" set-fn="patientDetail.setSelectedSection(arg1)">
+     </contents-button>
+     <contents-button section="'Vital Signs'" get-fn="patientDetail.getSelectedSection()" set-fn="patientDetail.setSelectedSection(arg1)">
      </contents-button>
     </md-list>
   </md-sidenav>
@@ -47,7 +55,7 @@
         <md-subheader class="md-primary"><md-icon md-svg-icon='./assets/svg/experiment-results.svg' style="padding-right:10px;"></md-icon>Patient Information</md-subheader>
         <md-divider ></md-divider>
         <div ng-show="patientDetail.patient == undefined" style="position: relative;"><span us-spinner></span></div>
-        <md-list flex="">
+        <md-list class="md-dense" flex="">
           <md-list-item class="md-3-line">
             <resource-item resource="'Patient'" entry="patientDetail.patient" last="true">
             </resource-item>
@@ -61,7 +69,7 @@
         <md-subheader class="md-warn"><md-icon md-svg-icon='./assets/svg/warning.svg' style="padding-right:10px;"></md-icon>Allergies</md-subheader>
         <md-divider ></md-divider>
         <div ng-hide="patientDetail.allergyEntries != undefined" style="position: relative;"><span us-spinner></span></div>
-        <md-list flex="">
+        <md-list class="md-dense" flex="">
           <md-list-item class="md-3-line" ng-repeat="entry in patientDetail.allergyEntries">
             <resource-item resource="'AllergyIntolerance'" entry="entry" last="$last">
             </resource-item>
@@ -72,11 +80,11 @@
     </md-card>
     
     <md-card>
-      <section id="Encounters">
+      <section  id="Encounters">
         <md-subheader class="md-primary"><md-icon md-svg-icon='./assets/svg/hospital.svg' style="padding-right:10px;"></md-icon>Encounters</md-subheader>
         <md-divider ></md-divider>
         <div ng-hide="patientDetail.encounterEntries != undefined" style="position: relative;"><span us-spinner></span></div>
-        <md-list flex="">
+        <md-list class="md-dense" flex="">
           <md-list-item class="md-3-line" ng-repeat="entry in patientDetail.encounterEntries">
             <resource-item resource="'Encounter'" entry="entry" last="$last">
             </resource-item>
@@ -87,11 +95,26 @@
     </md-card>
 
     <md-card>
+      <section  id="Immunizations">
+        <md-subheader class="md-primary"><md-icon md-svg-icon='./assets/svg/syringe.svg' style="padding-right:10px;"></md-icon>Immunizations</md-subheader>
+        <md-divider ></md-divider>
+        <div ng-hide="patientDetail.immunizationEntries != undefined" style="position: relative;"><span us-spinner></span></div>
+        <md-list class="md-dense" flex="">
+          <md-list-item class="md-3-line" ng-repeat="entry in patientDetail.immunizationEntries">
+            <resource-item resource="'Immunization'" entry="entry" last="$last">
+            </resource-item>
+          </md-list-item>
+          <h3 ng-show="!patientDetail.immunizationEntries.length && patientDetail.immunizationEntries != undefined" style="text-align:center;">N/A <h3>
+        </md-list>
+      </section>
+    </md-card>
+
+    <md-card>
       <section id="Conditions">
         <md-subheader class="md-warn"><md-icon md-svg-icon='./assets/svg/heart-beats.svg' style="padding-right:10px;"></md-icon>Conditions</md-subheader>
         <md-divider ></md-divider>
         <div ng-show="patientDetail.conditionEntries == undefined" style="position: relative;"><span us-spinner></span></div>
-        <md-list flex="">
+        <md-list class="md-dense" flex="">
           <md-list-item class="md-3-line" ng-repeat="entry in patientDetail.conditionEntries">
             <resource-item resource="'Condition'" entry="entry" last="$last">
             </resource-item>
@@ -106,7 +129,7 @@
         <md-subheader class="md-primary"><md-icon md-svg-icon='./assets/svg/pills.svg' style="padding-right:10px;"></md-icon>Prescriptions</md-subheader>
         <md-divider ></md-divider>
         <div ng-hide="patientDetail.prescriptions != undefined" style="position: relative;"><span us-spinner></span></div>
-        <md-list flex="">
+        <md-list class="md-dense" flex="">
           <md-list-item class="md-3-line" ng-repeat="entry in patientDetail.prescriptions">
 
             <resource-item resource="'MedicationPrescription'" entry="entry" last="$last">
@@ -122,12 +145,42 @@
         <md-subheader class="md-primary"><md-icon md-svg-icon='./assets/svg/scalpel.svg' style="padding-right:10px;"></md-icon>Procedures</md-subheader>
         <md-divider ></md-divider>
         <div ng-hide="patientDetail.procedureEntries != undefined" style="position: relative;"><span us-spinner></span></div>
-        <md-list flex="">
+        <md-list class="md-dense" flex="">
           <md-list-item class="md-3-line" ng-repeat="entry in patientDetail.procedureEntries">
             <resource-item resource="'Procedure'" entry="entry" last="$last">
             </resource-item>
           </md-list-item>
           <h3 ng-show="!patientDetail.procedureEntries.length && patientDetail.procedureEntries != undefined" style="text-align:center;">N/A <h3>
+        </md-list>
+      </section>
+    </md-card>
+
+    <md-card>
+      <section id="Lab Results">
+        <md-subheader class="md-primary"><md-icon md-svg-icon='./assets/svg/microscope.svg' style="padding-right:10px;"></md-icon>Lab Results</md-subheader>
+        <md-divider ></md-divider>
+        <div ng-hide="patientDetail.diagnosticReportEntries != undefined" style="position: relative;"><span us-spinner></span></div>
+        <md-list class="md-dense" flex="">
+          <md-list-item class="md-3-line" ng-repeat="entry in patientDetail.diagnosticReportEntries">
+            <resource-item resource="'DiagnosticReport'" entry="entry" last="$last">
+            </resource-item>
+          </md-list-item>
+          <h3 ng-show="!patientDetail.diagnosticReportEntries.length && patientDetail.diagnosticReportEntries != undefined" style="text-align:center;">N/A <h3>
+        </md-list>
+      </section>
+    </md-card>
+
+    <md-card>
+      <section id="Vital Signs">
+        <md-subheader class="md-primary"><md-icon md-svg-icon='./assets/svg/pulse.svg' style="padding-right:10px;"></md-icon>Vital Signs</md-subheader>
+        <md-divider ></md-divider>
+        <div ng-hide="patientDetail.observationEntries != undefined" style="position: relative;"><span us-spinner></span></div>
+        <md-list class="md-dense" flex="">
+          <md-list-item class="md-3-line" ng-repeat="entry in patientDetail.observationEntries">
+            <resource-item resource="'Observation'" entry="entry" last="$last">
+            </resource-item>
+          </md-list-item>
+          <h3 ng-show="!patientDetail.observationEntries.length && patientDetail.observationEntries != undefined" style="text-align:center;">N/A <h3>
         </md-list>
       </section>
     </md-card>

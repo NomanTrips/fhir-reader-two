@@ -11,6 +11,9 @@ resourceDirective.directive('resourceItem', ['$routeParams', '$http', '$template
       Procedure: 'procedure.html',
       MedicationPrescription: 'prescription.html',
       Patient: 'patient.html',
+      Immunization: 'immunization.html',
+      DiagnosticReport: 'diagnosticreport.html',
+      Observation: 'observation.html',
     };
 
     var templateUrl = baseUrl + templateMap[contentType];

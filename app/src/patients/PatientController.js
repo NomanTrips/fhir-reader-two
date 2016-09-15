@@ -42,6 +42,11 @@ patientControllers.controller('PatientDetailCtrl', ['$routeParams', 'fhirCalls',
         patientDetail.encounterEntries = entries;
      });
 
+  fhirCalls.fhirSearch($routeParams.id, 'Immunization')
+     .then(function(entries){
+        patientDetail.immunizationEntries = entries;
+     });
+
   fhirCalls.fhirSearch($routeParams.id, 'Condition')
      .then(function(entries){
         patientDetail.conditionEntries = entries;
@@ -74,6 +79,16 @@ patientControllers.controller('PatientDetailCtrl', ['$routeParams', 'fhirCalls',
       });
 
     });
+
+  fhirCalls.fhirSearch($routeParams.id, 'DiagnosticReport')
+     .then(function(entries){
+        patientDetail.diagnosticReportEntries = entries;
+     });
+
+  fhirCalls.fhirSearch($routeParams.id, 'Observation')
+     .then(function(entries){
+        patientDetail.observationEntries = entries;
+     });
 
   patientDetail.getSelectedSection = function() {
     return patientDetail.section;

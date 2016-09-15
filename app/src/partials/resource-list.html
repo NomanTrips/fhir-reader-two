@@ -1,7 +1,7 @@
 <div flex layout="row">
   <md-sidenav  class="md-sidenav-left" md-whiteframe="4" ng-click="ul.toggleList()" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left">
     <md-list flex="" >
-      <md-subheader style="background-color:#424242;color:white;">Availible Resources:</md-subheader>
+      <div><h3 style="text-align:center;">Availible resources:<h3></div>
       <md-list-item>
         <md-button class="md-raised md-primary md-hue-1" ng-click="resources.loadResources('Patient');showResources = ! resources.isNoneSelected();" ng-class="resources.isSelectedType('Patient') ? 'selected' : 'unselected'">
           Patients
@@ -68,8 +68,8 @@
       <section id="Resources List">
         <div ng-hide="resources.resList"><span us-spinner></span></div>
         <md-divider ></md-divider>
-        <md-list class="md-dense" flex="">
-          <md-list-item class="md-2-line" ng-repeat="entry in resources.resourceEntries | filter:query">
+        <md-list flex="">
+          <md-list-item class="md-3-line" ng-repeat="entry in resources.resourceEntries | filter:query">
             <md-button ng-click="resources.navigateToResource(entry.resource.id)">   
               <div class="md-list-item-text" ng-show="resources.isSelectedType('Patient')">                    
                 <h3><b>{{entry.resource.name[0].given + ' '+ entry.resource.name[0].family}}</b></h3>
@@ -81,11 +81,11 @@
                 <p><b>Id:</b> {{entry.resource.id}}</p>
                 <p><b>Status: </b> {{entry.resource.verificationStatus}}</p>         
               </div>
-              <div class="md-list-item-text" ng-show="resources.isSelectedType('Procedure')">        
-                <h3>{{entry.resource.code.coding[0].display + ' ' + entry.resource.code.coding[0].code}} </h3>
-                <p><b>Performed on:</b> {{entry.resource.performedDateTime}} <b>Reason: </b>{{entry.resource.reasonCodeableConcept.text}}</p>
-                <p><b>Performed by:</b> {{entry.resource.performer.actor[0].display}}</p>       
-              </div>
+
+              <resource-item ng-show="resources.isSelectedType('Procedure')" resource="'Procedure'" entry="entry" last="$last">
+              </resource-item>
+
+
               <div class="md-list-item-text" ng-show="resources.isSelectedType('MedicationPrescription')"> 
                 <p><b>Id:</b> {{entry.resource.id}}</p>         
                 <p><b>Dose: </b>  {{entry.resource.dosageInstruction[0].doseQuantity.value}}</p>
@@ -97,7 +97,6 @@
                 <p><b>Dose form: </b> {{entry.resource.form.coding[0].display}}</p>         
               </div>
             </md-button>
-            <md-divider ></md-divider>
           </md-list-item>
         </md-list>
       </section>
