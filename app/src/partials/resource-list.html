@@ -1,106 +1,160 @@
 <div flex layout="row">
-  <md-sidenav  class="md-sidenav-left" md-whiteframe="4" ng-click="ul.toggleList()" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left">
-    <md-list flex="" >
-      <div><h3 style="text-align:center;">Availible resources:<h3></div>
-      <md-list-item>
-        <md-button class="md-raised md-primary md-hue-1" ng-click="resources.loadResources('Patient');showResources = ! resources.isNoneSelected();" ng-class="resources.isSelectedType('Patient') ? 'selected' : 'unselected'">
-          Patients
-        </md-button>
-      </md-list-item>
-      <md-list-item>
-        <md-button class="md-raised md-primary md-hue-1" ng-click="resources.loadResources('Condition');showResources = ! resources.isNoneSelected();" ng-class="resources.isSelectedType('Condition') ? 'selected' : 'unselected'">
-          Conditions
-        </md-button>
-      </md-list-item>
-      <md-list-item>
-        <md-button class="md-raised md-primary md-hue-1" ng-click="resources.loadResources('Procedure');showResources = ! resources.isNoneSelected();" ng-class="resources.isSelectedType('Procedure') ? 'selected' : 'unselected'">
-          Procedures
-        </md-button>
-      </md-list-item>
-      <md-list-item>
-        <md-button class="md-raised md-primary md-hue-1" ng-click="resources.loadResources('MedicationPrescription');showResources = ! resources.isNoneSelected();" ng-class="resources.isSelectedType('MedicationPrescription') ? 'selected' : 'unselected'">
-          Medication Prescriptions
-        </md-button>
-      </md-list-item>
-      <md-list-item>
-        <md-button class="md-raised md-primary md-hue-1" ng-click="resources.loadResources('Medication');showResources = ! resources.isNoneSelected();" ng-class="resources.isSelectedType('Medication') ? 'selected' : 'unselected'">
-          Medication
-        </md-button>
-      </md-list-item>
-    </md-list>
-  </md-sidenav>
 
-  <md-content flex>
-    
-    <md-card ng-show="!showResources">
-      <section id="Splashpage">
-        <md-divider ></md-divider>
-        <md-list flex="">
-          <md-list-item class="md-3-line">
-            <div class="md-list-item-text">   
-              <md-icon md-svg-icon='./assets/svg/ic_arrow_back.svg' style="padding-right:10px;"></md-icon>   
-              <b>Click a resource type to load resources.</b>       
-            </div>
-          </md-list-item>
-        </md-list>
-      </section>
-    </md-card>
+  <md-sidenav  class="md-sidenav-left" md-whiteframe="4" ng-click="ul.toggleList()" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left" >
 
-    <md-toolbar class="md-accent" ng-show="showResources">
-      <div class="md-toolbar-tools">
-        <h2 flex="2">
-          {{resources.resourceType + 's:'}}
-        </h2>
-        <md-button class="md-raised md-warn" aria-label="Search" ng-click="showSearch = !showSearch" md-theme="button">
-          <md-icon md-svg-icon="search_white" ></md-icon>
-          <label class="button-text">Search</label>
-        </md-button>    
-        <div class="search-container">     
-          <md-input-container md-theme="input" ng-show="showSearch">
-            <label>&nbsp;</label>
-            <input ng-model="query" placeholder="enter search" style="background-color:white;">
-          </md-input-container>
-        </div>
+    <md-toolbar class="md-toolbar-tools md-primary">
+      <div >
+        <h3 flex="2">
+          FHIR-reader
+        </h3>
       </div>
     </md-toolbar>
 
-    <md-card ng-show="showResources">
-      <section id="Resources List">
-        <div ng-hide="resources.resList"><span us-spinner></span></div>
-        <md-divider ></md-divider>
-        <md-list flex="">
-          <md-list-item class="md-3-line" ng-repeat="entry in resources.resourceEntries | filter:query">
-            <md-button ng-click="resources.navigateToResource(entry.resource.id)">   
-              <div class="md-list-item-text" ng-show="resources.isSelectedType('Patient')">                    
-                <h3><b>{{entry.resource.name[0].given + ' '+ entry.resource.name[0].family}}</b></h3>
-                <p><b>Id:</b> {{entry.resource.id}}</p>
-                <p><b>DOB: </b> {{entry.resource.birthDate}} <b>Gender: </b> {{entry.resource.gender}}</p>             
-              </div>           
-              <div class="md-list-item-text" ng-show="resources.isSelectedType('Condition')">        
-                <h3><b>{{entry.resource.code.coding[0].display + ' ' + entry.resource.code.coding[0].code}}</b></h3>
-                <p><b>Id:</b> {{entry.resource.id}}</p>
-                <p><b>Status: </b> {{entry.resource.verificationStatus}}</p>         
-              </div>
+  <div layout="column" ng-cloak="" class="autocompletedemoCustomTemplate">
+    <form ng-submit="$event.preventDefault()">
+      <md-autocomplete class="autocompletable" ng-disabled="ctrl.isDisabled" md-no-cache="ctrl.noCache" md-selected-item="ctrl.selectedItem" md-search-text-change="resources.setSearchText(ctrl.searchText)" md-search-text="ctrl.searchText" md-selected-item-change="resources.navToPatient(entry.resource.id)" md-items="entry in resources.patientEntries | filter:ctrl.searchText" md-item-text="entry.resource.name[0].given" md-min-length="0" placeholder="Enter patient name" md-menu-class="autocompletable-contents">
+        <md-item-template >
+          <span class="item-title">
+            <span> {{entry.resource.name[0].given + ' '+ entry.resource.name[0].family}}  </span>
+          </span>
+          <span class="item-metadata">
+            <span>
+              <strong> {{entry.resource.gender}} &nbsp;&nbsp;&nbsp;&nbsp; {{entry.resource.birthDate}}</strong>
+            </span>
+          </span>
+        </md-item-template>
+      </md-autocomplete>
+    </form>
+</div>
 
-              <resource-item ng-show="resources.isSelectedType('Procedure')" resource="'Procedure'" entry="entry" last="$last">
-              </resource-item>
+<div style="padding-top:100px;">
+<md-subheader  md-theme="dark-grey">Connection settings:</md-subheader>
+</div>
+
+<div layout="row" layout-align="left center"><md-input-container >
+        <label>Fhir server</label>
+        <md-select ng-model="resources.selectedServer" md-selected-text="resources.getSelectedServer()">
+          <md-optgroup label="fhir server">
+            <md-option ng-value="server" ng-repeat="server in resources.servers.servers" ng-click="resources.setSelectedServer(server)">{{server.server.name}}</md-option>
+          </md-optgroup>
+        </md-select>
+      </md-input-container>
+ <md-button class="md-icon-button md-primary md-raised" aria-label="Settings" ng-click="resources.showFhirSettings($event)">
+        <md-icon md-svg-icon='./assets/svg/settings-work-tool.svg'></md-icon>
+      </md-button>
+</div>
+
+<div layout="row" layout-align="left center">
+          <md-input-container  >
+            <label>Client name:</label>
+            <input  flex="90" ng-model="resources.clientName" disabled="">
+
+          </md-input-container>
+        <md-button style="padding-bottom=40px" class="md-icon-button md-primary md-raised" aria-label="Profile" ng-click="showFhirSettings($event)" >       
+        <md-icon md-svg-icon='./assets/svg/man-user.svg' ></md-icon>
+          
+          </md-button>
 
 
-              <div class="md-list-item-text" ng-show="resources.isSelectedType('MedicationPrescription')"> 
-                <p><b>Id:</b> {{entry.resource.id}}</p>         
-                <p><b>Dose: </b>  {{entry.resource.dosageInstruction[0].doseQuantity.value}}</p>
-                <p><b>Route:</b>  {{entry.resource.dosageInstruction[0].route.coding[0].display}}</p>       
-              </div>
-              <div class="md-list-item-text" ng-show="resources.isSelectedType('Medication')">        
-                <h3><b>{{entry.resource.code.coding[0].display + ' ' + entry.resource.code.coding[0].code}}</b></h3>
-                <p><b>Id:</b> {{entry.resource.id}}</p>
-                <p><b>Dose form: </b> {{entry.resource.form.coding[0].display}}</p>         
-              </div>
+
+</div>
+
+<md-subheader >Client permissions:</md-subheader>
+    <md-chips>
+      <md-chip>patient/*.read</md-chip>
+      <md-chip>condition/*.read</md-chip>
+      <md-chip>observation/*.read</md-chip>
+      <md-chip>medication/*.read</md-chip>
+    </md-chips>
+
+  </md-sidenav>
+
+
+
+  <md-content flex>
+
+<md-card md-theme="{{ showDarkTheme ? 'dark-orange' : 'default' }}" md-theme-watch="">
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Fhir server: </span>
+            <span class="md-subhead">Resources:</span>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-content layout="row" layout-align="space-between">
+          <div class="md-media-xl card-media"></div>
+
+          <md-card-actions layout="column">
+            <md-button class="md-icon-button" aria-label="Favorite">
+              <md-icon md-svg-icon="img/icons/favorite.svg"></md-icon>
             </md-button>
-          </md-list-item>
-        </md-list>
-      </section>
-    </md-card>
+            <md-button class="md-icon-button" aria-label="Settings">
+              <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Share">
+              <md-icon md-svg-icon="img/icons/share-arrow.svg"></md-icon>
+            </md-button>
+          </md-card-actions>
+
+        </md-card-content>
+      </md-card>
+
+
     
   </md-content>
+
 </div>
+
+<script type="text/ng-template" id="dialog1.tmpl.html"><md-dialog aria-label="Fhir server settings">
+  <form ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Fhir server settings</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <h2></h2>
+        
+        <md-input-container class="md-block">
+          <label>Fhir server end-point URL:</label>
+          <input ng-model="fhirServer.address">
+        </md-input-container>
+
+        <md-input-container class="md-block">
+          <label>Authorization Server URL</label>
+          <input ng-model="authServer.address">
+        </md-input-container>
+
+        <md-input-container class="md-block">
+          <label>Client Id</label>
+          <input ng-model="authServer.id">
+        </md-input-container>
+  
+      <md-input-container class="md-block">
+          <label>Client Secret</label>
+          <textarea ng-model="authServer.Secret" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
+        </md-input-container>
+
+      </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" md-autofocus>
+        More on Wikipedia
+      </md-button>
+      <span flex></span>
+      <md-button ng-click="answer('not useful')">
+       Not Useful
+      </md-button>
+      <md-button ng-click="answer('useful')">
+        Useful
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>
+</script>

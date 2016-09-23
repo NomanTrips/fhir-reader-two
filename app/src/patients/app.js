@@ -98,6 +98,7 @@ patientApp.config(function($mdThemingProvider, $mdIconProvider){
       'hue-1': '50'
     } )
     .warnPalette('deep-orange');
+  $mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
 
 
   });

@@ -35,28 +35,41 @@ resourceListServices.factory('Resources', ['$resource',
   var fhirServices = angular.module('fhirServices', ['ngResource']);
   fhirServices.factory("fhirCalls", function($resource){
     
-    var Bundle = $resource('http://www.fhirbridge.net/:resource?patient=:id', {}, {
+    var SearchById = $resource('http://www.fhirbridge.net/:resource?patient=:id', {}, {
         query: {method:'GET', params:{id:'patients', resource: 'resource'}, isArray:false, headers:{'Accept':'application/json; charset=UTF-8'} }
       });
 
-    var Res = $resource('http://www.fhirbridge.net/:resource/:id', {}, {
+    var Search = $resource('http://www.fhirbridge.net/:resource', {}, {
+        query: {method:'GET', params:{id:'patients', resource: 'resource'}, isArray:false, headers:{'Accept':'application/json; charset=UTF-8'} }
+      });
+
+    var GetbyId = $resource('http://www.fhirbridge.net/:resource/:id', {}, {
         query: {method:'GET', params:{id:'patients', resource: 'resource'}, isArray:false, headers:{'Accept':'application/json; charset=UTF-8'} }
       });
 
     return {
-      fhirSearch: function(id, resourceType) {
-        return Bundle.get({id: id, resource: resourceType})
+
+      fhirSearchById: function(id, resourceType) {
+        return SearchById.get({id: id, resource: resourceType})
           .$promise.then(function(bundle) {
-          var data = bundle.entry;
-          return data;
+            var data = bundle.entry;
+            return data;
+        });
+      },
+
+      fhirSearch: function(resourceType) {
+        return Search.get({resource: resourceType})
+          .$promise.then(function(bundle) {
+            var data = bundle.entry;
+            return data;
         });
       },
       
-      fhirGet: function(id, resourceType) {
-        return Res.get({id: id, resource: resourceType})
+      fhirGetById: function(id, resourceType) {
+        return GetbyId.get({id: id, resource: resourceType})
           .$promise.then(function(resource) {
-          var data = resource;
-          return data;
+            var data = resource;
+            return data;
         });
       }  
 

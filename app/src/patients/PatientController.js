@@ -32,37 +32,37 @@ patientControllers.controller('PatientDetailCtrl', ['$routeParams', 'fhirCalls',
   var patientDetail = this;
   var section = '';
 
-  fhirCalls.fhirSearch($routeParams.id, 'AllergyIntolerance')
+  fhirCalls.fhirSearchById($routeParams.id, 'AllergyIntolerance')
      .then(function(entries){
         patientDetail.allergyEntries = entries;
      });
 
-  fhirCalls.fhirSearch($routeParams.id, 'Encounter')
+  fhirCalls.fhirSearchById($routeParams.id, 'Encounter')
      .then(function(entries){
         patientDetail.encounterEntries = entries;
      });
 
-  fhirCalls.fhirSearch($routeParams.id, 'Immunization')
+  fhirCalls.fhirSearchById($routeParams.id, 'Immunization')
      .then(function(entries){
         patientDetail.immunizationEntries = entries;
      });
 
-  fhirCalls.fhirSearch($routeParams.id, 'Condition')
+  fhirCalls.fhirSearchById($routeParams.id, 'Condition')
      .then(function(entries){
         patientDetail.conditionEntries = entries;
      });
 
-  fhirCalls.fhirSearch($routeParams.id, 'Procedure')
+  fhirCalls.fhirSearchById($routeParams.id, 'Procedure')
      .then(function(entries){
         patientDetail.procedureEntries = entries;
      });
 
-  fhirCalls.fhirGet($routeParams.id, 'Patient')
+  fhirCalls.fhirGetById($routeParams.id, 'Patient')
      .then(function(patient){
         patientDetail.patient = patient;
      });
 
-  fhirCalls.fhirSearch($routeParams.id, 'MedicationPrescription')
+  fhirCalls.fhirSearchById($routeParams.id, 'MedicationPrescription')
     .then(function(entries){
       patientDetail.prescriptions = entries;
      
@@ -71,7 +71,7 @@ patientControllers.controller('PatientDetailCtrl', ['$routeParams', 'fhirCalls',
         var slashIndex = medicationRef.indexOf("/");
         var medicationId = medicationRef.substring((slashIndex +1), medicationRef.length);
 
-        fhirCalls.fhirGet(medicationId, 'Medication')
+        fhirCalls.fhirGetById(medicationId, 'Medication')
           .then(function(med){
             value.medication = med;
           });
@@ -80,12 +80,12 @@ patientControllers.controller('PatientDetailCtrl', ['$routeParams', 'fhirCalls',
 
     });
 
-  fhirCalls.fhirSearch($routeParams.id, 'DiagnosticReport')
+  fhirCalls.fhirSearchById($routeParams.id, 'DiagnosticReport')
      .then(function(entries){
         patientDetail.diagnosticReportEntries = entries;
      });
 
-  fhirCalls.fhirSearch($routeParams.id, 'Observation')
+  fhirCalls.fhirSearchById($routeParams.id, 'Observation')
      .then(function(entries){
         patientDetail.observationEntries = entries;
      });
