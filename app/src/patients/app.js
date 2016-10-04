@@ -5,14 +5,8 @@
 var patientApp = angular.module('patientApp', [
   'ngRoute',
   'ngMaterial',
-  'patientControllers',
-  'resourceControllers',
-  'resourceServices',
+  'ngResource',
   'angularSpinner',
-  'resourceListServices',
-  'resourceByIdServices',
-  'fhirServices',
-  'resourceDirective',
 ]).directive('contentsButton', ['$location', '$anchorScroll', function(location, anchorScroll) {
     return {
         // can be used as attribute or element
@@ -79,14 +73,18 @@ patientApp.config(['$routeProvider',
 patientApp.config(function($mdThemingProvider, $mdIconProvider){
   $mdIconProvider
     .defaultIconSet("./assets/svg/avatars.svg", 128)
-    .icon("menu", "./assets/svg/menu.svg"        , 24)
-    .icon("search_black", "./assets/svg/search_black.svg"        , 24)
-    .icon("search_white", "./assets/svg/search_white.svg"        , 24)
-    .icon("share", "./assets/svg/share.svg"       , 24)
-    .icon("google_plus", "./assets/svg/google_plus.svg" , 512)
-    .icon("hangouts", "./assets/svg/hangouts.svg"    , 512)
-    .icon("twitter", "./assets/svg/twitter.svg"     , 512)
-    .icon("phone", "./assets/svg/phone.svg"       , 512);
+    .icon("menu", "./assets/svg/menu.svg", 24)
+    .icon("experiment-results", "./assets/svg/experiment-results.svg", 24)
+    .icon("warning", "./assets/svg/warning.svg", 24)
+    .icon("hospital", "./assets/svg/hospital.svg", 24)
+    .icon("syringe", "./assets/svg/syringe.svg", 24)
+    .icon("heart-beats", "./assets/svg/heart-beats.svg", 24)
+    .icon("pills", "./assets/svg/pills.svg", 24)
+    .icon("scalpel", "./assets/svg/scalpel.svg", 24)
+    .icon("microscope", "./assets/svg/microscope.svg", 24)
+    .icon("pulse", "./assets/svg/pulse.svg", 24)
+    .icon("list", "./assets/svg/list.svg", 24)
+    .icon("settings-work-tool", "./assets/svg/settings-work-tool.svg", 24);
 
   $mdThemingProvider.theme('default')
     .primaryPalette('blue', {
@@ -98,6 +96,7 @@ patientApp.config(function($mdThemingProvider, $mdIconProvider){
       'hue-1': '50'
     } )
     .warnPalette('deep-orange');
+
   $mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
 
 

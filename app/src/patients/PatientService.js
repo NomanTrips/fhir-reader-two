@@ -2,18 +2,14 @@
 
 /* Services */
 
-var resourceByIdServices = angular.module('resourceByIdServices', ['ngResource']);
-
-resourceByIdServices.factory('ResourceById', ['$resource',
+patientApp.factory('ResourceById', ['$resource',
   function($resource){
     return $resource('http://www.fhirbridge.net/:resource/:id', {}, {
       query: {method:'GET', params:{id:'id', resource: 'resource'}, isArray:false, headers:{'Accept':'application/json; charset=UTF-8'} }
     });
   }]);
 
-var resourceListServices = angular.module('resourceListServices', ['ngResource']);
-
-resourceListServices.factory('Resources', ['$resource',
+patientApp.factory('Resources', ['$resource',
   function($resource){
     return $resource('http://www.fhirbridge.net/:resource?patient=:id', {}, {
       query: {method:'GET', params:{id:'patients', resource: 'resource'}, isArray:false, headers:{'Accept':'application/json; charset=UTF-8'} }
@@ -32,8 +28,7 @@ resourceListServices.factory('Resources', ['$resource',
 
   }]);
 
-  var fhirServices = angular.module('fhirServices', ['ngResource']);
-  fhirServices.factory("fhirCalls", function($resource){
+patientApp.factory("fhirCalls", function($resource){
     
     var SearchById = $resource('http://www.fhirbridge.net/:resource?patient=:id', {}, {
         query: {method:'GET', params:{id:'patients', resource: 'resource'}, isArray:false, headers:{'Accept':'application/json; charset=UTF-8'} }
@@ -77,10 +72,31 @@ resourceListServices.factory('Resources', ['$resource',
 
   });
 
+  patientApp.factory("ServerConn", function($resource){
+    
+    return {
 
-var procedureListServices = angular.module('procedureListServices', ['ngResource']);
+      fhirServerURL: function() {
+        return "http://www.fhirbridge.net"
+      },
 
-procedureListServices.factory('ProcedureList', ['$resource',
+      authServerURL: function() {
+        return "http://www.mitre.auth.com"
+      },
+
+      clientName: function() {
+        return "tarrytown-surgery-fhir"
+      },
+      
+      clientSecret: function() {
+        return "tarrytown-surgery-fhir"
+      }
+
+    }
+
+  });
+
+patientApp.factory('ProcedureList', ['$resource',
   function($resource){
     return $resource('http://www.fhirbridge.net/Procedure?subject=:id', {}, {
       query: {method:'GET', params:{id:'patients'}, isArray:false, headers:{'Accept':'application/json; charset=UTF-8'} }

@@ -1,9 +1,7 @@
 'use strict';
 
-var resourceControllers = angular.module('resourceControllers', []);
-
-resourceControllers.controller('ResourceCtrl', ['$mdSidenav', '$routeParams', 'ResourceList', '$location', 'fhirCalls', '$timeout', '$q', '$mdDialog',
-  function ($mdSidenav, $routeParams, ResourceList, $location, fhirCalls, $timeout, $q, $mdDialog) {
+patientApp.controller('ResourceCtrl', ['$mdSidenav', '$routeParams', '$location', 'fhirCalls', '$timeout', '$q', '$mdDialog', '$mdMedia',
+  function ($mdSidenav, $routeParams, $location, fhirCalls, $timeout, $q, $mdDialog, $mdMedia) {
   var self = this;
   //var resourceType = '';
   //resourceDetail.resList = false;
@@ -12,6 +10,10 @@ resourceControllers.controller('ResourceCtrl', ['$mdSidenav', '$routeParams', 'R
   self.customFullscreen = false;
   
   self.setSearchText = setSearchText;
+
+  self.toggleSideNav = function() {
+      $mdSidenav('left').toggle();
+  };
 
   fhirCalls.fhirSearch('Patient')
      .then(function(entries){
@@ -70,41 +72,30 @@ resourceControllers.controller('ResourceCtrl', ['$mdSidenav', '$routeParams', 'R
   };
  */
 
+  
   self.navToPatient = function(id) {
      var url = '/patients/'+ id;
       $location.path(url);
     };
 
+
   self.showFhirSettings = function(ev) {
+    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'));
     $mdDialog.show({
-      controller: DialogController,
-      templateUrl: 'dialog1.tmpl.html',
+      controller: 'SettingsDialogController',
+      controllerAs: 'settingsCtrl',
+      templateUrl: './src/partials/server-settings-dialog.html',
       parent: angular.element(document.body),
       targetEvent: ev,
       clickOutsideToClose:true,
-      fullscreen: self.customFullscreen // Only for -xs, -sm breakpoints.
+      fullscreen: useFullScreen
     })
     .then(function(answer) {
       self.status = 'You said the information was "' + answer + '".';
     }, function() {
       self.status = 'You cancelled the dialog.';
     });
-  };
-
-  function DialogController($scope, $mdDialog) {
-    $scope.hide = function() {
-      $mdDialog.hide();
-    };
-
-    $scope.cancel = function() {
-      $mdDialog.cancel();
-    };
-
-    $scope.answer = function(answer) {
-      $mdDialog.hide(answer);
-    };
-  }
-   
+  };   
 
 }]);
 

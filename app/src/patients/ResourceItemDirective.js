@@ -1,6 +1,5 @@
-var resourceDirective = angular.module('resourceDirective', []);
 
-resourceDirective.directive('resourceItem', ['$routeParams', '$http', '$templateCache', '$compile', function($routeParams, $http, $templateCache, $compile) {
+patientApp.directive('resourceItem', ['$routeParams', '$http', '$templateCache', '$compile', function($routeParams, $http, $templateCache, $compile) {
   var getTemplate = function(contentType) {
     var templateLoader,
     baseUrl = 'src/partials/',

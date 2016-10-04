@@ -38,7 +38,7 @@ md-list-item > button {
 
   md-list .md-button.selected {
 
-   /* background-color: #B0B0B0;*/
+    color: #03a9f4;
   }
 
 

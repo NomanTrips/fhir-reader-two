@@ -1,15 +1,13 @@
 'use strict';
-     
-var patientControllers = angular.module('patientControllers', []);
 
-patientControllers.controller('PatientListCtrl', ['PatientList', '$mdSidenav', '$location',
+patientApp.controller('PatientListCtrl', ['PatientList', '$mdSidenav', '$location',
   function (PatientList, $mdSidenav, $location) {
   this.selected = null;
   this.showTableOfContents = false;
 
-  this.togglePatientsList = function() {
+  self.toggleSideNav = function() {
       $mdSidenav('left').toggle();
-    };
+  };
 
   this.selectPatient = function(patient) {
      var url = $location.url() +'/'+patient.resource.id;
@@ -27,7 +25,7 @@ patientControllers.controller('PatientListCtrl', ['PatientList', '$mdSidenav', '
 
 }]);
 
-patientControllers.controller('PatientDetailCtrl', ['$routeParams', 'fhirCalls',
+patientApp.controller('PatientDetailCtrl', ['$routeParams', 'fhirCalls',
   function ($routeParams, fhirCalls) {
   var patientDetail = this;
   var section = '';

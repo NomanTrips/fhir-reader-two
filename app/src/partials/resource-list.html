@@ -12,10 +12,22 @@
 
   <div layout="column" ng-cloak="" class="autocompletedemoCustomTemplate">
     <form ng-submit="$event.preventDefault()">
-      <md-autocomplete class="autocompletable" ng-disabled="ctrl.isDisabled" md-no-cache="ctrl.noCache" md-selected-item="ctrl.selectedItem" md-search-text-change="resources.setSearchText(ctrl.searchText)" md-search-text="ctrl.searchText" md-selected-item-change="resources.navToPatient(entry.resource.id)" md-items="entry in resources.patientEntries | filter:ctrl.searchText" md-item-text="entry.resource.name[0].given" md-min-length="0" placeholder="Enter patient name" md-menu-class="autocompletable-contents">
+      <md-autocomplete 
+        class="autocompletable" 
+        ng-disabled="ctrl.isDisabled" 
+        md-no-cache="ctrl.noCache" 
+        md-selected-item="ctrl.selectedItem" 
+        md-search-text-change="resources.setSearchText(ctrl.searchText)" 
+        md-search-text="ctrl.searchText" 
+        md-selected-item-change="resources.navToPatient(entry.resource.id)" 
+        md-items="entry in resources.patientEntries | orderBy:'resource.name[0].family' | filter:ctrl.searchText" 
+        md-item-text="entry.resource.name[0].given" 
+        md-min-length="3" 
+        placeholder="Enter patient name" 
+        md-menu-class="autocompletable-contents">
         <md-item-template >
-          <span class="item-title">
-            <span> {{entry.resource.name[0].given + ' '+ entry.resource.name[0].family}}  </span>
+          <span md-highlight-text="ctrl.searchText" md-highlight-flags="i" class="item-title">
+             {{entry.resource.name[0].family + ', ' +  entry.resource.name[0].given}}  
           </span>
           <span class="item-metadata">
             <span>
@@ -23,6 +35,9 @@
             </span>
           </span>
         </md-item-template>
+        <md-not-found>
+          <span>No patients matching: "{{ctrl.searchText}}" found.</span>
+        </md-not-found>
       </md-autocomplete>
     </form>
 </div>
@@ -40,22 +55,17 @@
         </md-select>
       </md-input-container>
  <md-button class="md-icon-button md-primary md-raised" aria-label="Settings" ng-click="resources.showFhirSettings($event)">
-        <md-icon md-svg-icon='./assets/svg/settings-work-tool.svg'></md-icon>
+        <md-icon md-svg-icon="settings-work-tool"></md-icon>
+        <md-tooltip md-direction="right">Change server settings</md-tooltip>
       </md-button>
 </div>
 
 <div layout="row" layout-align="left center">
           <md-input-container  >
             <label>Client name:</label>
-            <input  flex="90" ng-model="resources.clientName" disabled="">
+            <input ng-model="resources.clientName" disabled="">
 
           </md-input-container>
-        <md-button style="padding-bottom=40px" class="md-icon-button md-primary md-raised" aria-label="Profile" ng-click="showFhirSettings($event)" >       
-        <md-icon md-svg-icon='./assets/svg/man-user.svg' ></md-icon>
-          
-          </md-button>
-
-
 
 </div>
 
@@ -71,90 +81,65 @@
 
 
 
-  <md-content flex>
+  <md-content flex layout="row" layout-align="center center" >
+<div layout="column" layout-fill layout-padding >
+      
 
-<md-card md-theme="{{ showDarkTheme ? 'dark-orange' : 'default' }}" md-theme-watch="">
+
+<md-card md-theme="{{ showDarkTheme ? 'dark-orange' : 'default' }}" md-theme-watch="" >
+  <div layout="row">
+        <toggle-sidenav></toggle-sidenav>
+
         <md-card-title>
           <md-card-title-text>
-            <span class="md-headline">Fhir server: </span>
-            <span class="md-subhead">Resources:</span>
+            <span class="md-headline">Server at a glance: </span>
           </md-card-title-text>
         </md-card-title>
-        <md-card-content layout="row" layout-align="space-between">
-          <div class="md-media-xl card-media"></div>
+  </div>
+        <md-card-content layout="column" layout-align="space-between">
 
+<div layout="column">
+<md-subheader>Available resource types</md-subheader>
+    <md-chips>
+      <md-chip>Patients (24)</md-chip>
+      <md-chip>Encounters (67)</md-chip>
+      <md-chip>Conditions (15)</md-chip>
+      <md-chip>Medications (8)</md-chip>
+      <md-chip>Prescriptions (34)</md-chip>
+      <md-chip>Observations (150)</md-chip>
+      <md-chip>Results (200)</md-chip>
+      <md-chip>Diagnosis (30)</md-chip>
+    </md-chips>
+</div>
+<div layout="column">
+
+<md-subheader>Publisher & Contact</md-subheader>
+  <h3>Tarrytown Hospital</h3>
+  <span>81 Fairview Ave.</span>
+  <span>Tarrytown NY, 10591</span>
+  <span><b>P:</b> 845.464.9999</span>
+  <span><b>E:</b> ttownhospital@empireNY.com</span>
+</div>
           <md-card-actions layout="column">
             <md-button class="md-icon-button" aria-label="Favorite">
-              <md-icon md-svg-icon="img/icons/favorite.svg"></md-icon>
+              <md-icon md-svg-icon=""></md-icon>
             </md-button>
             <md-button class="md-icon-button" aria-label="Settings">
-              <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+              <md-icon md-svg-icon=""></md-icon>
             </md-button>
             <md-button class="md-icon-button" aria-label="Share">
-              <md-icon md-svg-icon="img/icons/share-arrow.svg"></md-icon>
+              <md-icon md-svg-icon=""></md-icon>
             </md-button>
           </md-card-actions>
 
         </md-card-content>
       </md-card>
-
+</div>
 
     
   </md-content>
 
 </div>
 
-<script type="text/ng-template" id="dialog1.tmpl.html"><md-dialog aria-label="Fhir server settings">
-  <form ng-cloak>
-    <md-toolbar>
-      <div class="md-toolbar-tools">
-        <h2>Fhir server settings</h2>
-        <span flex></span>
-        <md-button class="md-icon-button" ng-click="cancel()">
-          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
-        </md-button>
-      </div>
-    </md-toolbar>
-
-    <md-dialog-content>
-      <div class="md-dialog-content">
-        <h2></h2>
-        
-        <md-input-container class="md-block">
-          <label>Fhir server end-point URL:</label>
-          <input ng-model="fhirServer.address">
-        </md-input-container>
-
-        <md-input-container class="md-block">
-          <label>Authorization Server URL</label>
-          <input ng-model="authServer.address">
-        </md-input-container>
-
-        <md-input-container class="md-block">
-          <label>Client Id</label>
-          <input ng-model="authServer.id">
-        </md-input-container>
-  
-      <md-input-container class="md-block">
-          <label>Client Secret</label>
-          <textarea ng-model="authServer.Secret" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
-        </md-input-container>
-
-      </div>
-    </md-dialog-content>
-
-    <md-dialog-actions layout="row">
-      <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" md-autofocus>
-        More on Wikipedia
-      </md-button>
-      <span flex></span>
-      <md-button ng-click="answer('not useful')">
-       Not Useful
-      </md-button>
-      <md-button ng-click="answer('useful')">
-        Useful
-      </md-button>
-    </md-dialog-actions>
-  </form>
-</md-dialog>
+<script type="text/ng-template" id="dialog1.tmpl.html">
 </script>
